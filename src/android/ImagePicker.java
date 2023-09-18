@@ -63,10 +63,14 @@ public class ImagePicker extends CordovaPlugin {
         } else if (ACTION_GET_PICTURES.equals(action)) {
             final JSONObject params = args.getJSONObject(0);
             this.maxImageCount = params.has("maximumImagesCount") ? params.getInt("maximumImagesCount") : 20;
+            int desiredWidth = params.has("width") ? params.getInt("width") : 0;
+            int desiredHeight = params.has("height") ? params.getInt("height") : 0;
 
             Intent imagePickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             imagePickerIntent.setType("image/*");
             imagePickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            imagePickerIntent.putExtra("WIDTH", desiredWidth);
+            imagePickerIntent.putExtra("HEIGHT", desiredHeight);
             cordova.startActivityForResult(this, imagePickerIntent, SELECT_PICTURE);
             this.showMaxLimitWarning();
             return true;
